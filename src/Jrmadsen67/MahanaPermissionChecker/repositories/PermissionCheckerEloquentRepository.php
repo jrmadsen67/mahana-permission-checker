@@ -79,16 +79,14 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		// user has no groups
 		if (empty($user['group_ids'])) return false;
 
-		$children = $this->db
-			->from($this->group_actions_table)
-			->where($this->group_actions_object_registry_parent_id_field . ' = ', $object['parent_id'])
-			->where_in($this->group_actions_action_code_field, array($action))
-			->where_in($this->group_actions_group_id_field, $user['group_ids'])
+		$children = GroupActions::where($this->group_actions_object_registry_parent_id_field, ' = ', $object['parent_id'])
+			->whereIn($this->group_actions_action_code_field, array($action))
+			->whereIn($this->group_actions_group_id_field, $user['group_ids'])
 			->get();
 
-		if (!$children->num_rows())	return false;
+		if ($children->isEmpty())	return false;
 
-		foreach ($children->result() as $key => $child) {
+		foreach ($children as $key => $child) {
 			$object_type_id = $child->object_type_id;
 			$objects_ids[]	= $child->object_id;
 		}
