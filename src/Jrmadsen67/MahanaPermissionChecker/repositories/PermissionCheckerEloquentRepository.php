@@ -96,13 +96,13 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		return array('object_type_id'=>$object_type_id, 'objects_ids'=>$objects_ids );
 	}	
 
-	function get_object_id($object_id, $object_type_id)
+	function get_object_registry_id($object_id, $object_type_id)
 	{
-		$query = $this->db->where($this->object_registry_object_id_field . ' =', $object_id)
-			->where($this->object_registry_object_type_id_field . ' =', $object_type_id)
-			->get($this->object_registry_table);
+		$query = \DB::table($this->object_registry_table)->where($this->object_registry_object_id_field , '=', $object_id)
+			->where($this->object_registry_object_type_id_field , '=', $object_type_id)
+			->first();	
 
-		return ($query->num_rows())? $query->row()->id : 0;
+		return (empty($query)) ? 0 : $query->id ;			
 	}
 
 	function get_object($object_id, $object_type_id)

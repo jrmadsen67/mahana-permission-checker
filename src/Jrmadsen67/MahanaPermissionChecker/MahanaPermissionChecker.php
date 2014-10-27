@@ -25,8 +25,8 @@ class MahanaPermissionChecker {
 		return $this->permission_repo->check_child_permissions($action, $user, $object);
 	}
 	
-	public function get_object_id($object_id, $object_type_id){
-		return $this->permission_repo->get_object_id($object_id, $object_type_id);
+	public function get_object_registry_id($object_id, $object_type_id){
+		return $this->permission_repo->get_object_registry_id($object_id, $object_type_id);
 	}
 	
 	public function get_object($object_id, $object_type_id){
