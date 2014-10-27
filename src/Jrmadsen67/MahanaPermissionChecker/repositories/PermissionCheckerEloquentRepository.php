@@ -112,22 +112,22 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		if (empty($object_types_array) || !isset($object_types_array[$object_type_id])) return false;
 
 		// get the object record dynamically
-		$query = $this->db->where($this->object_types_id_field . ' =', $object_id)
-			->get($object_types_array[$object_type_id]);
+		$results = \DB::table($object_types_array[$object_type_id])->where($this->object_types_id_field , '=', $object_id)->first();
 
-		if (!$query->num_rows()) return false;
-		$object = $query->row_array();
+		if (empty($results)) return false;
+		$object = (array)$results;
 
 		// get the object_registry record - 
 		// we could use a join, but expecting this table to get very big
-		$query = $this->db->where($this->object_registry_object_id_field . ' =', $object_id)
-			->where($this->object_registry_object_type_id_field . ' =', $object_type_id)
-			->get($this->object_registry_table);
+		$query = \DB::table($this->object_registry_table)->where($this->object_registry_object_id_field , '=', $object_id)
+			->where($this->object_registry_object_type_id_field , '=', $object_type_id)
+			->first();
 
-		if (!$query->num_rows()) return  $object;	
+		if (empty($query)) return  $object;	
+		$query = (array)$query;
 
 		// we'd like a complete object that includes registry info
-		$object = array_merge($object, $query->row_array());	
+		$object = array_merge($object, $query);	
 
 		return $object;
 	}
