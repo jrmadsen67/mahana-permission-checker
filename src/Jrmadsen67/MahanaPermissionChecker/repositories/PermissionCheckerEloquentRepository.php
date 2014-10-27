@@ -137,10 +137,10 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		// NOTE: if you are certain of your object_types list, you may simply create an array here or in a config 
 		// file & return it from this function, instead of the additional db call
 
-		$query = $this->db->get($this->object_types_table);
-		if ($query->num_rows() == 0) return array();
+		$results = ObjectTypes::get();
+		if ($results->isEmpty()) return [];
 
-		foreach ($query->result() as $row) {
+		foreach ($results as $row) {
 			$object_types[$row->{$this->object_types_id_field}] = $row->{$this->object_types_type_field};
 		}
 
