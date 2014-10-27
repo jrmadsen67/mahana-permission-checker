@@ -19,6 +19,9 @@ return [
 
 	'object_types_type_field' => 'type',
 
+	// If your objects are a set array, you can save a db call by loading here
+	'object_types_array' => [],
+
 
 	// Group actions table
 	'group_actions_table' => 'group_actions',
@@ -38,6 +41,5 @@ return [
 	'group_actions_object_id_field' => 'object_id',
 
 	'group_actions_object_type_id_field' => 'object_type_id',
-
 
 ];

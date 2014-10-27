@@ -134,8 +134,11 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 
 	function get_object_types()
 	{
-		// NOTE: if you are certain of your object_types list, you may simply create an array here or in a config 
+		// if you are certain of your object_types list, you may simply create an array in the config 
 		// file & return it from this function, instead of the additional db call
+
+		$object_types = \Config::get('mahana-permission-checker::permission_checker.object_types_array');
+		if (!empty($object_types)) { return $object_types; }
 
 		$results = ObjectTypes::get();
 		if ($results->isEmpty()) return [];

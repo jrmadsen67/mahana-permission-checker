@@ -26,7 +26,7 @@ class ObjectTypes extends \Eloquent {
 
 	public function setFillable()
 	{
-		$id      = \Config::get('mahana-permission-checker::permission_checker.object_types_id_field');
+		$id   = \Config::get('mahana-permission-checker::permission_checker.object_types_id_field');
 		$type = \Config::get('mahana-permission-checker::permission_checker.object_types_type_field');
 
 
