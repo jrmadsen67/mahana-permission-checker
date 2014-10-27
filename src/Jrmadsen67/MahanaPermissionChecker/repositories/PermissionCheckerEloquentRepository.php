@@ -54,22 +54,20 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 
     }
 
-	function check_permissions($action, $user, $object)
+	function check_permissions($action, array $group_ids, $object)
 	{
 		// user has no groups
-		if (empty($user['group_ids'])) return false;
+		if (empty($group_ids)) return false;
 
 		$lineage = array_map('trim', explode('-', $object['lineage'])); 
 		// object not registered, or lineage improperly set up
 		if (empty($lineage)) return false;		
 
-		$count_row = $this->db->select('COUNT(*) as `count`, SUM(' . $this->group_actions_deny_field . ') AS `deny`', false)
-			->where_in($this->group_actions_action_code_field, array($action, 'DENY'))
-			->from($this->group_actions_table)
-			->where_in($this->group_actions_object_registry_id_field, $lineage)
-			->where_in($this->group_actions_group_id_field, $user['group_ids'])
-			->get()
-			->row();
+		$count_row = GroupActions::select(\DB::Raw('COUNT(*) as `count`'), \DB::Raw('SUM(' . $this->group_actions_deny_field . ') AS `deny`'))
+			->whereIn($this->group_actions_action_code_field, array($action, 'DENY'))
+			->whereIn($this->group_actions_object_registry_id_field, $lineage)
+			->whereIn($this->group_actions_group_id_field, $group_ids)
+			->first();	
 
 		return (!empty($count_row) && $count_row->count && !$count_row->deny);
 	}

@@ -17,12 +17,12 @@ class MahanaPermissionChecker {
 		return $this->permission_repo->has_permission($action, $user, $object);
 	}
 	
-	public function check_permissions($action, $user, $object){
-		return $this->permission_repo->check_permissions($action, $user, $object);
+	public function check_permissions($action, $group_ids, $object){
+		return $this->permission_repo->check_permissions($action, $group_ids, $object);
 	}
 	
-	public function check_child_permissions($action, $user, $object){
-		return $this->permission_repo->check_child_permissions($action, $user, $object);
+	public function check_child_permissions($action, $group_ids, $object){
+		return $this->permission_repo->check_child_permissions($action, $group_ids, $object);
 	}
 	
 	public function get_object_registry_id($object_id, $object_type_id){
