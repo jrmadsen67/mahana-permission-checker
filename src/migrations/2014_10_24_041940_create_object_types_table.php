@@ -12,10 +12,10 @@ class CreateObjectTypesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('object_types', function(Blueprint $table)
+		Schema::create(\Config::get('mahana-permission-checker::permission_checker.object_types_table'), function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->string('type', 55);
+			$table->increments(\Config::get('mahana-permission-checker::permission_checker.object_types_id_field'));
+			$table->string(\Config::get('mahana-permission-checker::permission_checker.object_types_type_field'), 55);
 			$table->softDeletes();
 			$table->timestamps();
 		});
@@ -28,7 +28,7 @@ class CreateObjectTypesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('object_types');
+		Schema::drop(\Config::get('mahana-permission-checker::permission_checker.object_types_table'));
 	}
 
 }

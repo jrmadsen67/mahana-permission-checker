@@ -12,16 +12,16 @@ class CreateGroupActionsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('group_actions', function(Blueprint $table)
+		Schema::create(\Config::get('mahana-permission-checker::permission_checker.group_actions_table'), function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->integer('object_registry_id')->nullable();
-			$table->integer('object_registry_parent_id')->nullable();
-			$table->integer('group_id');
-			$table->string('action_code', 55);
-			$table->tinyInteger('deny')->default(0);
-			$table->integer('object_id');
-			$table->integer('object_type_id');
+			$table->increments(\Config::get('mahana-permission-checker::permission_checker.group_actions_id_field'));
+			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_object_registry_id_field'))->nullable();
+			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_object_registry_parent_id_field'))->nullable();
+			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_group_id_field'));
+			$table->string(\Config::get('mahana-permission-checker::permission_checker.group_actions_action_code_field'), 55);
+			$table->tinyInteger(\Config::get('mahana-permission-checker::permission_checker.group_actions_deny_field'))->default(0);
+			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_object_id_field'));
+			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_object_type_id_field'));
 			$table->softDeletes();
 			$table->timestamps();
 		});
@@ -35,7 +35,7 @@ class CreateGroupActionsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('group_actions');
+		Schema::drop(\Config::get('mahana-permission-checker::permission_checker.group_actions_table'));
 	}
 
 }
