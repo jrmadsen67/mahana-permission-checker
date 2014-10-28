@@ -14,7 +14,7 @@ IMPORTANT NOTE: still in active development - I'm currently tweaking & rearrangi
 Available (recommended) via composer:
 
 	"require": {
-		 "jrmadsen67/mahana-hierarchy-laravel": "dev-master"
+		 "jrmadsen67/mahana-permission-checker": "dev-master"
 	}
 
 In you Laravel app.php file add this to providers:
