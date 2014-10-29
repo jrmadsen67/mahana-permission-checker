@@ -59,7 +59,7 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		// user has no groups
 		if (empty($group_ids)) return false;
 
-		$lineage = array_map('trim', explode('-', $object['lineage'])); 
+		$lineage = array_map('trim', explode('-', isset($object['lineage'])? $object['lineage']: ''));
 		// object not registered, or lineage improperly set up
 		if (empty($lineage)) return false;		
 
