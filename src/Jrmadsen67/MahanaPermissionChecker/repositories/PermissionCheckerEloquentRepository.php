@@ -33,6 +33,12 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 
 	protected $group_actions_object_registry_parent_id_field;
 
+	protected $group_actions_start_time_field;
+
+	protected $group_actions_end_time_field;
+
+	protected $group_actions_timed;
+
 
     public function __construct()
     {
@@ -60,13 +66,30 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		if (empty($group_ids)) return false;
 
 		$lineage = array_map('trim', explode('-', isset($object['lineage'])? $object['lineage']: ''));
+
 		// object not registered, or lineage improperly set up
 		if (empty($lineage)) return false;		
 
 		$count_row = GroupActions::select(\DB::Raw('COUNT(*) as `count`'), \DB::Raw('SUM(' . $this->group_actions_deny_field . ') AS `deny`'))
-			->whereIn($this->group_actions_action_code_field, array($action, 'DENY'))
-			->whereIn($this->group_actions_object_registry_id_field, $lineage)
-			->whereIn($this->group_actions_group_id_field, $group_ids)
+			->where(function($query) use ($action, $lineage, $group_ids)
+			{
+				$query->whereIn($this->group_actions_action_code_field, array($action, 'DENY'));
+				$query->whereIn($this->group_actions_object_registry_id_field, $lineage);
+				$query->whereIn($this->group_actions_group_id_field, $group_ids);
+
+				if ($this->group_actions_timed) {
+				    $now = \Carbon\Carbon::now()->toDateTimeString();
+
+					$query->where(function($query) use ($now){
+						$query->where($this->group_actions_start_time_field, '<=', $now);
+						$query->orWhereNull($this->group_actions_start_time_field);
+					});
+					$query->where(function($query) use ($now){
+						$query->where($this->group_actions_end_time_field, '>=', $now);
+						$query->orWhereNull($this->group_actions_end_time_field);
+					});
+				}
+			})
 			->first();	
 
 		return (!empty($count_row) && $count_row->count && !$count_row->deny);
