@@ -100,10 +100,26 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 		// user has no groups
 		if (empty($group_ids)) return false;
 
-		$children = GroupActions::where($this->group_actions_object_registry_parent_id_field, ' = ', $object['parent_id'])
-			->whereIn($this->group_actions_action_code_field, array($action))
-			->whereIn($this->group_actions_group_id_field, $group_ids)
-			->get();
+		$children = GroupActions::where(function($query) use ($action, $group_ids, $object)
+			{
+				$query->where($this->group_actions_object_registry_parent_id_field, '=', $object['id']);
+				$query->whereIn($this->group_actions_action_code_field, array($action));
+				$query->whereIn($this->group_actions_group_id_field, $group_ids);
+
+				if ($this->group_actions_timed) {
+				    $now = \Carbon\Carbon::now()->toDateTimeString();
+
+					$query->where(function($query) use ($now){
+						$query->where($this->group_actions_start_time_field, '<=', $now);
+						$query->orWhereNull($this->group_actions_start_time_field);
+					});
+					$query->where(function($query) use ($now){
+						$query->where($this->group_actions_end_time_field, '>=', $now);
+						$query->orWhereNull($this->group_actions_end_time_field);
+					});
+				}
+			
+			})->get();
 
 		if ($children->isEmpty())	return false;
 
