@@ -22,6 +22,8 @@ class CreateGroupActionsTable extends Migration {
 			$table->tinyInteger(\Config::get('mahana-permission-checker::permission_checker.group_actions_deny_field'))->default(0);
 			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_object_id_field'));
 			$table->integer(\Config::get('mahana-permission-checker::permission_checker.group_actions_object_type_id_field'));
+			$table->dateTime(\Config::get('mahana-permission-checker::permission_checker.group_actions_start_time_field'))->nullable();
+			$table->dateTime(\Config::get('mahana-permission-checker::permission_checker.group_actions_end_time_field'))->nullable();
 			$table->softDeletes();
 			$table->timestamps();
 		});
