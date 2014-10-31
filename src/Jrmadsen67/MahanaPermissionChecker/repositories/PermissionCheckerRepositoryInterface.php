@@ -11,5 +11,5 @@ interface PermissionCheckerRepositoryInterface
 	function get_object($object_id, $object_type_id);
 	function get_object_types();
 	function create_group_action($data);
-
+    function remove_group_action($ids);
 }

@@ -41,5 +41,8 @@ class MahanaPermissionChecker {
 		return $this->permission_repo->create_group_action($data);
 	}
 
+	public function remove_group_action($ids){
+		return $this->permission_repo->remove_group_action($ids);
+	}
 
 }	

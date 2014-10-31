@@ -193,6 +193,9 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 
 	}
 
-
+	function remove_group_action($ids){
+		$ids = (!is_array($ids)) ? [$ids] : $ids;
+		GroupActions::destroy($ids);
+	}
 
 }	
