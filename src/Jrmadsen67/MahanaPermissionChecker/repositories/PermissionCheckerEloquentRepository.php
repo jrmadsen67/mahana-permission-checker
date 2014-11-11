@@ -188,7 +188,7 @@ class PermissionCheckerEloquentRepository implements PermissionCheckerRepository
 
 	function create_group_action($data)
 	{
-		$insert = GroupActions::create($data);
+		$insert = GroupActions::firstOrCreate($data);
 		return $insert->id;
 
 	}
